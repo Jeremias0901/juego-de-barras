@@ -1,0 +1,42 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    --barraColor: black;
+    --tamanioPelota: 50px;
+    --anchoBarra: 30px;
+    --altoBarra: 200px;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+}
+
+.contenedor{
+    display: flex;
+    min-width: 900px;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+
+    margin-top: 250px;
+}
+
+.barra{
+    width: var(--anchoBarra);
+    height: var(--altoBarra);
+    background-color: var(--barraColor);
+
+    position: relative;
+}
+
+#pelota{
+    width: var(--tamanioPelota);
+    height: var(--tamanioPelota);
+    border-radius: 50%;
+    background-color: red;
+
+    position: relative;
+}
