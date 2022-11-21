@@ -1,30 +1,73 @@
 
-const keys = {
-    up: ['W', 'S'],
-    down: ['O', 'L']
-};
-
-let div = document.querySelector(".contenedor");
-
-// handler
-document.addEventListener("keydown", (e) => {
-    
-    if(getKey(e)) div.innerHTML += getKey(e);
-});
-
-function MoveBars(letter){
-    
-    // Mueve las barras en base la letra presionada
-    
+const step = 10;
+const bars = {
+  left: {
+    element: {
+      HTML: document.querySelector("#bar__left"),
+      position: 0
+    },
+    keys: { up: 'W', down: 'X' }
+  },
+  right: {
+    element: {
+      HTML: document.querySelector("#bar__right"),
+      position: 0
+    },
+    keys: { up: 'O', down: 'M' }
+  }
 }
 
-function getKey(e){
-    let letter = '';
+document.addEventListener("keydown", (e) => {
+  
+  /**
+   * obtener la tecla presionada.
+   * determinar en base tecla presionada:
+   *   + barra
+   *   + direccion
+   * mover(barra, dirrecion)
+   */
+  
+  e.preventDefault();
+  // obtiene la tecla presionada
+  let input__letter = GetKey(e);
+  
+  // devuelve la direccion de la tecla.
+  //   function GetDirecction(String letter) : boolean | null
+  let direcction = GetDirecction(input__letter);
+  if (direcction === null) return;
 
-    if (window.event) letter = String.fromCharCode(e.keyCode).toLocaleUpperCase();
-    else if (e.which) letter = String.fromCharCode(e.which).toLocaleUpperCase();
-
-    if (!keys.up.includes(letter) && !keys.down.includes(letter)) return false;
-    
-    return letter;
+  let found = false;
+  for (const side in bars) {
+    for (const direcction_ in bars[side]['keys']) {
+      
+      if (bars[side]['keys'][direcction_] === input__letter){ // compara las letras con la letra de entrada
+        found = true;
+        MoveBar(bars[side].element, direcction);
+        break;
+      }
+    }
+    if(found) break;
   }
+});
+
+function MoveBar(bar, direction){
+  
+  bar.position = direction ? bar.position - step : bar.position + step;
+  bar.HTML.style.top = bar.position + "px";
+}
+
+const GetDirecction = (letter) => {
+
+  for (const side in bars)
+    for (const direcction in bars[side]['keys'])
+      if(letter === bars[side]['keys'][direcction])
+        return (direcction === "up");
+  
+  return null;
+}
+
+const GetKey = (e) => {
+  if (window.event) return String.fromCharCode(e.keyCode).toLocaleUpperCase();
+  else if (e.which) return String.fromCharCode(e.which).toLocaleUpperCase();
+  else return null;  
+}
